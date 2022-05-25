@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
     </head>
-        <body>
-            <h1><span>Hello</span> World !</h1>
-            <p> Aqui vem paragrafo</p>
-            <p> Aqui vem mais outro paragrafo</p>
-            <img src="https://s2.glbimg.com/dwVoIul4utkLd4AaFJB1SfgaAjI=/172x129:979x582/fit-in/540x304/middle/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_9de6fd454d9849c8bee5b63069fbb074/internal_photos/bs/2022/P/5/p0GBMGSTyCBIAHzhUAFw/captura-de-tela-2022-05-17-as-13.23.23.png">
-        </body>
+    <body>
+        <h1 id="titulo"><span>Hello</span></h1>
+        {% for entrada in entradas %}
+        <h2> {{ entrada.titulo }} </h2>
+        <p >  {{ entrada.texto }} </p> 
+        {% endfor %}
+       
+    </body>
 </html>
+

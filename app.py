@@ -10,17 +10,39 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTML/Element - para referencia de html
 # https://www.w3schools.com/ - para referencia html
 # git add .
+# git commit -m "aula 1"
+# git push
 
+from flask import Flask, render_template, g
+import sqlite3
 
+DATABASE = "banco.bd"
+SECRET_KEY = "chave"
 
-from flask  import Flask, render_template #primeiro sempre chamar flask com letra minuscula e depois Flask com letra maiuscula
+app = Flask("Hello")
+app.config.from_object(__name__)
 
-app = Flask("Hello") # criou serviço
+def conecta_bd():
+    return sqlite3.connect(DATABASE)
 
-@app.route('/hello') # criou um link/url, por enquanto só uma segunda parte de uma URL normal
-def hello():   # funçao que será chamada
-    return render_template ("hello.html") # sera mostrada na página
+@app.before_request
+def antes_requisicao():
+    g.bd = conecta_bd()
+
+@app.teardown_request
+def depois_requisicao(e):
+    g.bd.close()
+
+@app.route("/")
+def exibir_entradas():
+    sql = "SELECT titulo, texto, criado_em FROM entradas ORDER BY id DESC"
+    cur = g.bd.execute(sql)
+    entradas = []
+    for titulo, texto, criado_em in cur.fetchall():
+        entradas.append({"titulo": titulo, "texto": texto, "criado_em": criado_em})
+    return render_template("layout.html", entradas=entradas)
 
 #@app.route('/tchau') # criou um link/url, por enquanto só uma segunda parte de uma URL normal
 #def tchau():   # funçao que será chamada
 #return "Tchauuuuu!!!!" # sera mostrada na página
+# sqlite3 banco.bd < esquema.sql  --- comando para criar o arquivo banco.bd
